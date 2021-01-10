@@ -1,0 +1,29 @@
+create table apartments(apt_id numeric(5),apt_name varchar(20),address varchar(50),city varchar(20),state varchar(20),no_of_flats numeric(5));
+create table flat(flat_id numeric(5),apt_id numeric(5),floor numeric(5),bhk numeric(5),rent_id numeric(5),active varchar(10));
+create table customer(cust_id numeric(5),flat_id numeric(5),apt_id numeric(5),cust_name varchar(20),phno numeric(10),email varchar(30),date_start varchar(15),maint_id numeric(5),main_cost numeric(5),rent_cost numeric(5));
+create table maintenance(main_id numeric(5), main_type varchar(25),cost numeric(10));
+create table security(security_id numeric(5),security_name varchar(20),shift varchar(15),apt_id numeric(5));
+create table rent(rent_id numeric(5),bhk numeric(5),cost numeric(10));
+create table payment(cust_id numeric(5),payment_type varchar(15),payment_date varchar(50),status varchar(5));
+
+alter table apartments add constraint apk primary key(apt_id);
+
+alter table flat add(constraint afk foreign key(apt_id) references apartments(apt_id) on delete cascade);
+alter table flat add constraint fapk primary key(flat_id,apt_id);
+
+alter table customer add constraint cpk primary key(cust_id);
+alter table customer add(constraint ffk foreign key(flat_id) references flat(flat_id) on delete cascade);
+alter table customer add(constraint afk1 foreign key(apt_id) references apartments(apt_id) on delete cascade);
+
+alter table payment add(constraint ucp primary key (cust_id,paying_for_month));
+alter table payment add(constraint cfk2 foreign key(cust_id) references customer(cust_id) on delete cascade);
+
+alter table maintenance add constraint mpk primary key(main_id);
+alter table maintenance add(constraint mfk1 foreign key(main_id) references maintenance(main_id) on delete cascade);
+
+alter table rent add constraint rpk primary key(rent_id);
+
+alter table security add constraint spk primary key(security_id);
+alter table security add(constraint afk2 foreign key(apt_id) references apartments(apt_id) on delete cascade);
+
+alter table flat add(constraint rfk foreign key(rent_id) references rent(rent_id) on delete cascade);
